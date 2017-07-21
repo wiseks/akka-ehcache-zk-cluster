@@ -37,7 +37,7 @@
  -->
 	<context:component-scan base-package="com">
 		<context:include-filter type="annotation"
-			expression="com.rpg.framework.annotation.MessageHandler" />
+			expression="com.framework.annotation.MessageHandler" />
 	</context:component-scan>
 
 </beans>

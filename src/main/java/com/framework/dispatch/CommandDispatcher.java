@@ -1,4 +1,4 @@
-package com.rpg.framework.dispatch;
+package com.framework.dispatch;
 
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
@@ -13,9 +13,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ClassUtils;
 
+import com.framework.annotation.MessageHandler;
+import com.framework.annotation.MessageMapping;
 import com.google.protobuf.GeneratedMessageLite;
-import com.rpg.framework.annotation.MessageHandler;
-import com.rpg.framework.annotation.MessageMapping;
 
 
 /**

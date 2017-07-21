@@ -1,4 +1,4 @@
-package com.rpg.framework.protobuf;
+package com.framework.protobuf;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
