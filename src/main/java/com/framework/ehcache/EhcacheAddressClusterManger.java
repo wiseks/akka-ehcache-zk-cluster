@@ -52,8 +52,10 @@ public class EhcacheAddressClusterManger implements IAddressClusterManager {
 		ServerInfo info = MAP.get(serverName);
 		if(info==null){
 			Element element = serverCache.get(serverName);
-			info = GsonUtil.jsonToBean(element.getObjectValue().toString(), ServerInfo.class);
-			MAP.put(serverName, info);
+			if(element!=null){
+				info = GsonUtil.jsonToBean(element.getObjectValue().toString(), ServerInfo.class);
+				MAP.put(serverName, info);
+			}
 		}
 		return info;
 	}

@@ -40,8 +40,12 @@ public class BeanUtils {
 	}
 	
 	public static void sendToServer(GeneratedMessageLite message,ServerInfo serverInfo){
-		ActorSelection remoteActor = ACTORSYSTEM.actorSelection(serverInfo.getAddress());
-		remoteActor.tell(message, ActorRef.noSender());
+		if(serverInfo!=null){
+			ActorSelection remoteActor = ACTORSYSTEM.actorSelection(serverInfo.getAddress());
+			remoteActor.tell(message, ActorRef.noSender());
+		}else{
+			System.out.println("serverInfo is null");
+		}
 	}
 	
 	public static Future<Object> askToServer(GeneratedMessageLite message,ServerInfo serverInfo){
