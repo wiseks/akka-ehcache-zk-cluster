@@ -26,10 +26,10 @@
     </defaultCache>
     <cache name="serverCache"
            maxElementsInMemory="2147483647"
-           eternal="false"
-           timeToIdleSeconds="259200000"
+           eternal="true"
+           timeToIdleSeconds="0"
            memoryStoreEvictionPolicy="LRU"
-           timeToLiveSeconds="259200000">
+           timeToLiveSeconds="0">
         <cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
                                    properties="replicateAsynchronously=true,  replicatePuts=true, replicateUpdates=true,  replicateUpdatesViaCopy=true, replicateRemovals=true"/>
         <bootstrapCacheLoaderFactory 
