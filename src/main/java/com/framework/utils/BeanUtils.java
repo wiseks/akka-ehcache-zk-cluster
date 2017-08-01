@@ -2,8 +2,10 @@ package com.framework.utils;
 
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Service;
 
 import com.framework.akka.AkkaMasterActor;
 import com.framework.dispatch.CommandDispatcher;
@@ -24,37 +26,39 @@ import scala.concurrent.ExecutionContext;
 import scala.concurrent.Future;
 import scala.concurrent.duration.FiniteDuration;
 
-
+@Service
 public class BeanUtils {
 
-	public static CommandDispatcher commandDispatcher = new CommandDispatcher();
-	
-	public static final ApplicationContext APPLICATION_CONTEXT = new ClassPathXmlApplicationContext("application.xml");
-	public static final Config CONFIG = ConfigFactory.load("master-application.conf");
-	private static final ActorSystem ACTORSYSTEM = ActorSystem.create("ServerSystem", CONFIG.getConfig("ServerSys"));
-	
-	
-	public static void init(){
-		commandDispatcher.init(APPLICATION_CONTEXT);
+	public static CommandDispatcher commandDispatcher;
+
+	@Autowired
+	public static ApplicationContext APPLICATION_CONTEXT;
+
+	public static Config CONFIG = ConfigFactory.load("master-application.conf");
+
+	private static ActorSystem ACTORSYSTEM = ActorSystem.create("ServerSystem", CONFIG.getConfig("ServerSys"));
+
+	public static void init() {
 		ACTORSYSTEM.actorOf(Props.create(AkkaMasterActor.class), "serverActor");
 	}
-	
-	public static void sendToServer(GeneratedMessageLite message,ServerInfo serverInfo){
-		if(serverInfo!=null){
+
+	public static void sendToServer(GeneratedMessageLite message, ServerInfo serverInfo) {
+		if (serverInfo != null) {
 			ActorSelection remoteActor = ACTORSYSTEM.actorSelection(serverInfo.getAddress());
 			remoteActor.tell(message, ActorRef.noSender());
-		}else{
+		} else {
 			System.out.println("serverInfo is null");
 		}
 	}
-	
-	public static Future<Object> askToServer(GeneratedMessageLite message,ServerInfo serverInfo){
+
+	public static Future<Object> askToServer(GeneratedMessageLite message, ServerInfo serverInfo) {
 		ActorSelection remoteActor = ACTORSYSTEM.actorSelection(serverInfo.getAddress());
-		Future<Object> future = Patterns.ask(remoteActor, message,new Timeout(FiniteDuration.create(5, TimeUnit.SECONDS)));
+		Future<Object> future = Patterns.ask(remoteActor, message,
+				new Timeout(FiniteDuration.create(5, TimeUnit.SECONDS)));
 		return future;
 	}
-	
-	public static void processFuture(IFutureProcesser processer,Future<Object> future){
+
+	public static void processFuture(IFutureProcesser processer, Future<Object> future) {
 		ExecutionContext ec = ACTORSYSTEM.dispatcher();
 		future.onSuccess(new OnSuccess<Object>() {
 			@Override
@@ -63,6 +67,9 @@ public class BeanUtils {
 			}
 		}, ec);
 	}
-	
-	
+
+	@Autowired
+	public void setDis(CommandDispatcher dis) {
+		commandDispatcher = dis;
+	}
 }

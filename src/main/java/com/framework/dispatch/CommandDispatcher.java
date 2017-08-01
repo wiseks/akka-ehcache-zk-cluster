@@ -9,8 +9,10 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import com.framework.annotation.MessageHandler;
@@ -21,9 +23,13 @@ import com.google.protobuf.GeneratedMessageLite;
 /**
  * 命令分发器
  */
+@Service
 public class CommandDispatcher {
 
-	private final Log log = LogFactory.getLog(this.getClass());
+	private static final Log log = LogFactory.getLog(CommandDispatcher.class);
+	
+	@Autowired
+	private ApplicationContext applicationContext;
 
 	private final Map<Class<?>, CommandHandlerHolder> handlers = new LinkedHashMap<Class<?>, CommandHandlerHolder>();
 	private final Map<String, Boolean> handlerCloses = new ConcurrentHashMap<String, Boolean>();
@@ -94,7 +100,7 @@ public class CommandDispatcher {
 	}
 
 	@PostConstruct
-	public void init(ApplicationContext applicationContext) {
+	public void init() {
 		// 从sping上下文取出所有消息处理器
 		Map<String, Object> handlerMap = applicationContext.getBeansWithAnnotation(MessageHandler.class);
 

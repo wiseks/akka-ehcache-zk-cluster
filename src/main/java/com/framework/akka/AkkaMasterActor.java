@@ -1,6 +1,8 @@
 package com.framework.akka;
 
-import org.apache.log4j.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.framework.utils.BeanUtils;
 import com.framework.utils.PropertiesUtils;
@@ -19,7 +21,7 @@ import akka.actor.UntypedAbstractActor;
  */
 public class AkkaMasterActor extends UntypedAbstractActor {
 
-	Logger logger = Logger.getLogger(this.getClass());
+	private static final Log logger = LogFactory.getLog(AkkaMasterActor.class);
 
 	@Override
 	public void onReceive(Object message) throws Exception {

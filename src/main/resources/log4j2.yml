@@ -1,0 +1,29 @@
+Configuration:
+  status: info
+  name: YAMLConfigTest
+  properties:
+    property:
+      name: filename
+      value: logs/ec_game.log
+  thresholdFilter:
+    level: info
+
+  appenders:
+    Console:
+      name: STDOUT
+      PatternLayout:
+        Pattern: "[QC%-d{yyyy-MM-dd HH:mm:ss}] %p [%t] %C.%M(%L) | %m%n"
+    File:
+      name: File
+      fileName: ${filename}
+      bufferedIO: false
+      PatternLayout:
+        Pattern: "[QC%-d{yyyy-MM-dd HH:mm:ss}] %p [%t] %C.%M(%L) | %m%n"
+
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        - ref: STDOUT
+        - ref: File
+        
