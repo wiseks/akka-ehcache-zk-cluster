@@ -4,11 +4,14 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.framework.akka.AkkaMasterActor;
 import com.framework.dispatch.CommandDispatcher;
+import com.framework.interfaces.IAddressClusterManager;
 import com.framework.interfaces.IFutureProcesser;
 import com.framework.interfaces.ServerInfo;
 import com.google.protobuf.GeneratedMessageLite;
@@ -28,24 +31,34 @@ import scala.concurrent.duration.FiniteDuration;
 
 @Service
 public class MessageUtil {
+	
+	private static final Log log = LogFactory.getLog(MessageUtil.class);
+	
+	private static IAddressClusterManager manager;
 
 	private static CommandDispatcher commandDispatcher;
 
-	public static Config CONFIG = ConfigFactory.load("master-application.conf");
+	public static final Config CONFIG = ConfigFactory.load("master-application.conf");
 
 	private static ActorSystem ACTORSYSTEM = ActorSystem.create("ServerSystem", CONFIG.getConfig("ServerSys"));
 
+	
 	
 	public static Object dispatcher(GeneratedMessageLite message){
 		return commandDispatcher.dispatch(message);
 	}
 	
-	public static void sendToServer(GeneratedMessageLite message, ServerInfo serverInfo) {
+	public static IAddressClusterManager getAddressClusterManager(){
+		return manager;
+	}
+	
+	public static void sendToServer(GeneratedMessageLite message,String serverName) {
+		ServerInfo serverInfo = manager.getServerInfo(serverName);
 		if (serverInfo != null) {
 			ActorSelection remoteActor = ACTORSYSTEM.actorSelection(serverInfo.getAddress());
 			remoteActor.tell(message, ActorRef.noSender());
 		} else {
-			System.out.println("serverInfo is null");
+			log.error("serverInfo is null:"+serverName);
 		}
 	}
 
@@ -74,5 +87,10 @@ public class MessageUtil {
 	@Autowired
 	private void setCommandDispatcher(CommandDispatcher dis) {
 		commandDispatcher = dis;
+	}
+	
+	@Autowired
+	private void setManager(IAddressClusterManager man){
+		manager = man;
 	}
 }
