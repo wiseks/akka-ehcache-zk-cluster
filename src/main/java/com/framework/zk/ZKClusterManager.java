@@ -8,9 +8,8 @@ import org.apache.zookeeper.data.Stat;
 
 import com.framework.interfaces.IAddressClusterManager;
 import com.framework.interfaces.ServerInfo;
-import com.framework.utils.BeanUtils;
+import com.framework.utils.MessageUtil;
 import com.framework.utils.GsonUtil;
-import com.framework.utils.Utils;
 import com.typesafe.config.Config;
 
 public class ZKClusterManager implements IAddressClusterManager {
@@ -23,13 +22,12 @@ public class ZKClusterManager implements IAddressClusterManager {
 	    // 连接时间 和重试次数  
 		RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3); 
 		client = CuratorFrameworkFactory.newClient(connectString, 5000, 5000, retryPolicy);
-	    String PATH = "/1";  
-	    
-	    Config childConfig = BeanUtils.CONFIG.getConfig("ServerSys");
+	    Config childConfig = MessageUtil.CONFIG.getConfig("ServerSys");
 		Config addressConfig = childConfig.getConfig("akka").getConfig("remote").getConfig("netty.tcp");
 		String hostname = addressConfig.getString("hostname");
 		int port = addressConfig.getInt("port");
-		String serverId = BeanUtils.CONFIG.getString("serverId");
+		String serverId = MessageUtil.CONFIG.getString("serverId");
+		String PATH = "/"+serverId;  
 		String serverAddress = "akka.tcp://ServerSystem@" + hostname + ":" + port + "/user/serverActor";
 		String serverIp = "ServerSys.akka.remote.netty.tcp.hostname=" + hostname;
 		ServerInfo info = new ServerInfo();

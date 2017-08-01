@@ -2,9 +2,9 @@ package com.framework.utils;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.framework.akka.AkkaMasterActor;
@@ -27,21 +27,19 @@ import scala.concurrent.Future;
 import scala.concurrent.duration.FiniteDuration;
 
 @Service
-public class BeanUtils {
+public class MessageUtil {
 
-	public static CommandDispatcher commandDispatcher;
-
-	@Autowired
-	public static ApplicationContext APPLICATION_CONTEXT;
+	private static CommandDispatcher commandDispatcher;
 
 	public static Config CONFIG = ConfigFactory.load("master-application.conf");
 
 	private static ActorSystem ACTORSYSTEM = ActorSystem.create("ServerSystem", CONFIG.getConfig("ServerSys"));
 
-	public static void init() {
-		ACTORSYSTEM.actorOf(Props.create(AkkaMasterActor.class), "serverActor");
+	
+	public static Object dispatcher(GeneratedMessageLite message){
+		return commandDispatcher.dispatch(message);
 	}
-
+	
 	public static void sendToServer(GeneratedMessageLite message, ServerInfo serverInfo) {
 		if (serverInfo != null) {
 			ActorSelection remoteActor = ACTORSYSTEM.actorSelection(serverInfo.getAddress());
@@ -67,9 +65,14 @@ public class BeanUtils {
 			}
 		}, ec);
 	}
+	
+	@PostConstruct
+	public void init() {
+		ACTORSYSTEM.actorOf(Props.create(AkkaMasterActor.class), "serverActor");
+	}
 
 	@Autowired
-	public void setDis(CommandDispatcher dis) {
+	private void setCommandDispatcher(CommandDispatcher dis) {
 		commandDispatcher = dis;
 	}
 }

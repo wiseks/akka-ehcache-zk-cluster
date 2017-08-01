@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.framework.interfaces.IAddressClusterManager;
 import com.framework.interfaces.ServerInfo;
-import com.framework.utils.BeanUtils;
+import com.framework.utils.MessageUtil;
 import com.framework.utils.GsonUtil;
 import com.typesafe.config.Config;
 
@@ -31,11 +31,11 @@ public class EhcacheAddressClusterManger implements IAddressClusterManager {
 			System.out.println("config cacheName:" + name);// 输出所有Cache名称
 		}
 		serverCache = manager.getCache("serverCache");
-		Config childConfig = BeanUtils.CONFIG.getConfig("ServerSys");
+		Config childConfig = MessageUtil.CONFIG.getConfig("ServerSys");
 		Config addressConfig = childConfig.getConfig("akka").getConfig("remote").getConfig("netty.tcp");
 		String hostname = addressConfig.getString("hostname");
 		int port = addressConfig.getInt("port");
-		String serverId = BeanUtils.CONFIG.getString("serverId");
+		String serverId = MessageUtil.CONFIG.getString("serverId");
 		String serverAddress = "akka.tcp://ServerSystem@" + hostname + ":" + port + "/user/serverActor";
 		String serverIp = "ServerSys.akka.remote.netty.tcp.hostname=" + hostname;
 		ServerInfo info = new ServerInfo();

@@ -4,7 +4,7 @@ package com.framework.akka;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.framework.utils.BeanUtils;
+import com.framework.utils.MessageUtil;
 import com.framework.utils.PropertiesUtils;
 import com.google.protobuf.GeneratedMessageLite;
 
@@ -28,7 +28,7 @@ public class AkkaMasterActor extends UntypedAbstractActor {
 		if(message instanceof String){
 			logger.info(PropertiesUtils.get("serverId")+">>>>>>>>>>"+message);
 		}else if(message instanceof GeneratedMessageLite){
-			Object response = BeanUtils.commandDispatcher.dispatch((GeneratedMessageLite)message);
+			Object response = MessageUtil.dispatcher((GeneratedMessageLite)message);
 			if(response!=null){
 				getSender().tell(response, getSelf());
 			}
