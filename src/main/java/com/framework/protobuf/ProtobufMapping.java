@@ -37,8 +37,6 @@ public class ProtobufMapping {
 
 	private static final Map<String, GeneratedMessageLite> cmd2Message = new HashMap<String, GeneratedMessageLite>();
 
-	//private static final Map<Class<?>, Short> messageClass2Cmd = new HashMap<Class<?>, Short>();
-
 	private ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
 
 	private MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);

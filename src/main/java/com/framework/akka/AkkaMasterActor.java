@@ -13,9 +13,8 @@ import akka.actor.UntypedAbstractActor;
 /**
  * ClassName: MasterActor <br/>
  * Function: 接受client消息 <br/>
- * date: 2016年8月5日 下午5:33:40 <br/>
  *
- * @author siinger
+ * @author wdj
  * @version 
  * @since JDK 1.7
  */
