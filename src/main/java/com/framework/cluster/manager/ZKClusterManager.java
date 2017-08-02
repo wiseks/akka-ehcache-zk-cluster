@@ -14,15 +14,21 @@ import com.typesafe.config.Config;
 
 public class ZKClusterManager implements IAddressClusterManager {
 
-	public ZKClusterManager() {
+	public ZKClusterManager(String ip,int port) {
+		this.ip = ip;
+		this.port = port;
 		init();
 	}
+	
+	private String ip;
+	
+	private int port;
 
 	private CuratorFramework client;
 	
 	@Override
 	public void init() {
-		String connectString = "127.0.0.1:2181";  
+		String connectString = ip+":"+port;  
 	    // 连接时间 和重试次数  
 		RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3); 
 		client = CuratorFrameworkFactory.newClient(connectString, 5000, 5000, retryPolicy);

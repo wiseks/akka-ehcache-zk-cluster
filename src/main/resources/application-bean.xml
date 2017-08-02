@@ -16,6 +16,12 @@
             http://www.springframework.org/schema/context 
             http://www.springframework.org/schema/context/spring-context-3.0.xsd">
             
-            <bean name="addressManager" class="com.framework.cluster.manager.ZKClusterManager"/>
+            <bean name="addressManager" class="com.framework.cluster.manager.ZKClusterManager">
+            	<constructor-arg name="ip" value="127.0.0.1"></constructor-arg>
+            	<constructor-arg name="port" value="2181"></constructor-arg>
+            </bean>
             
+            <!--  
+            <bean name="addressManager" class="com.framework.cluster.manager.EhcacheAddressClusterManger"/>
+            -->
 </beans>
