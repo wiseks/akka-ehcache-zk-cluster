@@ -4,6 +4,8 @@ import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 
@@ -34,6 +36,8 @@ public class CommandDispatcher {
 	private final Map<Class<?>, CommandHandlerHolder> handlers = new LinkedHashMap<Class<?>, CommandHandlerHolder>();
 	private final Map<String, Boolean> handlerCloses = new ConcurrentHashMap<String, Boolean>();
 	
+	ExecutorService service = Executors.newFixedThreadPool(10);
+	
 	public boolean closeMsg(String msgName){
 		Boolean isClose = handlerCloses.get(msgName);
 		if(isClose==null){
@@ -48,6 +52,15 @@ public class CommandDispatcher {
 		if (message == null)
 			return null;
 
+		service.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		long starttime = System.currentTimeMillis();
 
 		CommandHandlerHolder holder = handlers.get(message.getClass());

@@ -3,6 +3,10 @@ package com.framework.ehcache;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.stereotype.Service;
+
 import com.framework.interfaces.IAddressClusterManager;
 import com.framework.interfaces.ServerInfo;
 import com.framework.utils.MessageUtil;
@@ -13,6 +17,7 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
+//@Service
 public class EhcacheAddressClusterManger implements IAddressClusterManager {
 	
 
@@ -20,6 +25,7 @@ public class EhcacheAddressClusterManger implements IAddressClusterManager {
 	
 	private static final Map<String,ServerInfo> MAP = new ConcurrentHashMap<>();
 	
+	//@PostConstruct
 	@Override
 	public void init() {
 		// 缓存管理器
