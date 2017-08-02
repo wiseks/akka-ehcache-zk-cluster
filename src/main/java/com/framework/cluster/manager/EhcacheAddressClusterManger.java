@@ -1,16 +1,12 @@
-package com.framework.ehcache;
+package com.framework.cluster.manager;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.stereotype.Service;
-
 import com.framework.interfaces.IAddressClusterManager;
 import com.framework.interfaces.ServerInfo;
-import com.framework.utils.MessageUtil;
 import com.framework.utils.GsonUtil;
+import com.framework.utils.MessageUtil;
 import com.typesafe.config.Config;
 
 import net.sf.ehcache.Cache;
@@ -20,6 +16,9 @@ import net.sf.ehcache.Element;
 //@Service
 public class EhcacheAddressClusterManger implements IAddressClusterManager {
 	
+	public EhcacheAddressClusterManger() {
+		init();
+	}
 
 	private Cache serverCache;
 	

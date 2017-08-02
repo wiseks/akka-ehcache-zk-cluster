@@ -1,26 +1,25 @@
-package com.framework.zk;
-
-import javax.annotation.PostConstruct;
+package com.framework.cluster.manager;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.data.Stat;
-import org.springframework.stereotype.Service;
 
 import com.framework.interfaces.IAddressClusterManager;
 import com.framework.interfaces.ServerInfo;
-import com.framework.utils.MessageUtil;
 import com.framework.utils.GsonUtil;
+import com.framework.utils.MessageUtil;
 import com.typesafe.config.Config;
 
-@Service
 public class ZKClusterManager implements IAddressClusterManager {
+
+	public ZKClusterManager() {
+		init();
+	}
 
 	private CuratorFramework client;
 	
-	@PostConstruct
 	@Override
 	public void init() {
 		String connectString = "127.0.0.1:2181";  
